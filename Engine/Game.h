@@ -34,12 +34,25 @@ public:
 private:
 	void ComposeFrame();
 	void UpdateModel();
+	void DrawBrickArray();
 	/********************************/
 	/*  User Functions              */
 	/********************************/
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+	static constexpr int BricksRowNum = 8;
+	static constexpr int BricksColumeNum = 8;
+	static constexpr int ColorsNum = 5;
+	static constexpr int BrickNum = BricksColumeNum * BricksRowNum;
+	static constexpr int BrickSpreadingAreaSizeX = 500;
+	static constexpr int BrickSpreadingAreaSizeY = 200;
+	static constexpr int BrickSpreadingAreaOffsetX = (Graphics::ScreenWidth - BrickSpreadingAreaSizeX) / 2;
+	static constexpr int BrickSpreadingAreaOffsetY = 100;
+	const float BrickWidth = BrickSpreadingAreaSizeX / BricksRowNum;
+	const float BrickHeight = BrickSpreadingAreaSizeY / BricksColumeNum;
+	Brick BrickArray[BrickNum];
+	Color ColorArray[ColorsNum] = {Colors::Blue, Colors::Cyan, Colors::Gray, Colors::Green, Colors::Magenta};
 	/********************************/
 	/*  User Variables              */
 	/********************************/

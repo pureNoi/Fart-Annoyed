@@ -26,6 +26,16 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	for (int i = 0; i < BrickNum; i++)
+	{	
+		int IndexX = i % BricksRowNum;
+		int IndexY = i / BricksRowNum;
+		int ColorIndex = (i / BricksRowNum) % ColorsNum;
+		float RectanglePositionX = (IndexX * BrickWidth) + BrickSpreadingAreaOffsetX;
+		float RectanglePositionY = (IndexY * BrickHeight) + BrickSpreadingAreaOffsetY;
+		Vec2 RectangleOriginPosition = Vec2(RectanglePositionX, RectanglePositionY);
+		BrickArray[i].SetRectangleProperty(BrickWidth, BrickHeight, RectangleOriginPosition, ColorArray[ColorIndex]);
+	}
 }
 
 void Game::Go()
@@ -38,6 +48,15 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	DrawBrickArray();
+}
+
+void Game::DrawBrickArray()
+{
+	for (int i = 0; i< BrickNum; i++)
+	{
+		gfx.DrawBrick(BrickArray[i]);
+	}
 }
 
 void Game::ComposeFrame()
