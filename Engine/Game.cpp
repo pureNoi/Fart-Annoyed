@@ -88,7 +88,19 @@ void Game::Go()
 void Game::UpdateModel(float DeltaTime)
 {
 	PlayerPaddle.Update(wnd.kbd, DeltaTime);
-	PlayerBall.Update(BrickArray[1], PlayerPaddle);
+	bool test = false;
+	for (int i = 0; i < BrickNum; i++)
+	{
+		if (PlayerBall.DetectCollisionWithBrick(BrickArray[i]))
+		{
+			test = true;
+			break;
+		}
+	}
+	if (!(PlayerBall.DetectCollisionWithBoard() || PlayerBall.DetectCollisionWithPaddle(PlayerPaddle) || test))
+	{
+		PlayerBall.Update();
+	}
 }
 
 void Game::ComposeFrame()

@@ -14,6 +14,11 @@ void Brick::SetRectangleProperty(float WidthInput, float HeightInput, Vec2 Origi
 	Rectangle.RectangleColor = ColorInput;
 }
 
+void Brick::DestroySelf()
+{
+	IsDestroyed = true;
+}
+
 float Brick::GetOriginPositionX() const
 {
 	return Rectangle.OriginPosition.x;

@@ -9,12 +9,9 @@ Ball::Ball(float RadiusInput, Vec2 CenterPositionInput, Vec2 VelocityInput, Colo
 {
 }
 
-void Ball::Update(Brick& Brick, const Paddle& PlayerPaddle)
+void Ball::Update()
 {		
-	if (!(DetectCollisionWithBoard() || DetectCollisionWithPaddle(PlayerPaddle)))
-	{
-		CenterPosition += Velocity;
-	}
+	CenterPosition += Velocity;
 }
 
 bool Ball::DetectCollisionWithBoard()
@@ -112,6 +109,81 @@ bool Ball::DetectCollisionWithPaddle(const Paddle& PlayerPaddle)
 	{
 		CenterPosition.x = PaddleRightSidePosition + Radius;
 		BounceX();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Ball::DetectCollisionWithBrick(Brick& Brick)
+{
+	if (Brick.GetState())
+	{
+		return false;
+	}
+
+	const float BallTopSidePosition = CenterPosition.y + Velocity.y - Radius;
+	const float BallBottomSidePosition = CenterPosition.y + Velocity.y + Radius;
+	const float BallLeftSidePosition = CenterPosition.x + Velocity.x - Radius;
+	const float BallRightSidePosition = CenterPosition.x + Velocity.x + Radius;
+
+	const float BrickTopSidePosition = Brick.GetOriginPositionY() - SqrtRadius;
+	const float BrickBottomSidePosition = Brick.GetOriginPositionY() + Brick.GetHeight() + SqrtRadius;
+	const float BrickLeftSidePosition = Brick.GetOriginPositionX() - SqrtRadius;
+	const float BrickRightSidePosition = Brick.GetOriginPositionX() + Brick.GetWidth() + SqrtRadius;
+
+	if (CenterPosition.y <= BrickTopSidePosition
+		&&
+		BallBottomSidePosition >= BrickTopSidePosition
+		&&
+		CenterPosition.x >= BrickLeftSidePosition
+		&&
+		CenterPosition.x <= BrickRightSidePosition)
+	{
+		CenterPosition.y = BrickTopSidePosition - Radius;
+		BounceY();
+		Brick.DestroySelf();
+		return true;
+	}
+	else if (CenterPosition.y >= BrickBottomSidePosition
+		&&
+		BallTopSidePosition <= BrickBottomSidePosition
+		&&
+		CenterPosition.x >= BrickLeftSidePosition
+		&&
+		CenterPosition.x <= BrickRightSidePosition)
+	{
+		CenterPosition.y = BrickBottomSidePosition + Radius;
+		BounceY();
+		Brick.DestroySelf();
+		return true;
+	}
+	else if (CenterPosition.x <= BrickLeftSidePosition
+		&&
+		BallRightSidePosition >= BrickLeftSidePosition
+		&&
+		CenterPosition.y >= BrickTopSidePosition
+		&&
+		CenterPosition.y <= BrickBottomSidePosition)
+	{
+		CenterPosition.x = BrickLeftSidePosition - Radius;
+		BounceX();
+		Brick.DestroySelf();
+		return true;
+	}
+	else if (CenterPosition.x >= BrickRightSidePosition
+		&&
+		BallLeftSidePosition <= BrickRightSidePosition
+		&&
+		CenterPosition.y >= BrickTopSidePosition
+		&&
+		CenterPosition.y <= BrickBottomSidePosition)
+	{
+		CenterPosition.x = BrickRightSidePosition + Radius;
+		BounceX();
+		Brick.DestroySelf();
 		return true;
 	}
 	else
