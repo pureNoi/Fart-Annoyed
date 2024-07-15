@@ -94,28 +94,17 @@ void Game::Go()
 
 void Game::UpdateModel(float DeltaTime)
 {
-	if(!PlayerBall.GetState())
+	if (!PlayerBall.GetState())
 	{
 		PlayerPaddle.Update(wnd.kbd, DeltaTime, WallThickness);
 		bool IsBallCollidedWithBrick = false;
 		for (int i = 0; i < BrickNum; i++)
 		{
-			if (PlayerBall.DetectCollisionWithBrick(BrickArray[i], DeltaTime))
-			{
-				IsBallCollidedWithBrick = true;
-				break;
-			}
+			PlayerBall.DetectCollisionWithBrick(BrickArray[i], DeltaTime);
 		}
-		if (
-			!(PlayerBall.DetectCollisionWithBoard(WallThickness, DeltaTime)
-			||
-			PlayerBall.DetectCollisionWithPaddle(PlayerPaddle, DeltaTime)
-			||
-			IsBallCollidedWithBrick)
-		)
-		{
-			PlayerBall.Update(DeltaTime);
-		}
+		PlayerBall.DetectCollisionWithBoard(WallThickness, DeltaTime);
+		PlayerBall.DetectCollisionWithPaddle(PlayerPaddle, DeltaTime);
+		PlayerBall.Update(DeltaTime);
 	}
 }
 

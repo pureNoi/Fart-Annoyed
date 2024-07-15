@@ -11,9 +11,9 @@ class Ball
 public:
 	Ball(float RadiusInput, Vec2 CenterPositionInput, Vec2 VelocityInput, Color ColorInput);
 	void Update(float DeltaTime);
-	bool DetectCollisionWithBoard(float WallThickness, float DeltaTime);
-	bool DetectCollisionWithPaddle(const Paddle& PlayerPaddle, float DeltaTime);
-	bool DetectCollisionWithBrick(Brick& Brick, float DeltaTime);
+	void DetectCollisionWithBoard(float WallThickness, float DeltaTime);
+	void DetectCollisionWithPaddle(const Paddle& PlayerPaddle, float DeltaTime);
+	void DetectCollisionWithBrick(Brick& Brick, float DeltaTime);
 	bool GetState() const;
 	void BounceX();
 	void BounceY();
