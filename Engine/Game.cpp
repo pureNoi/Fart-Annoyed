@@ -25,7 +25,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	PlayerPaddle(PaddleWidth, PaddleHeight, Vec2(PaddleStartPositionX, PaddleStartPositionY), PaddleColor),
+	PlayerPaddle(PaddleWidth, PaddleHeight, PaddleMovingSpeed, Vec2(PaddleStartPositionX, PaddleStartPositionY), PaddleColor),
 	PlayerBall(BallRadius, Vec2(BallStartPositionX, BallStartPositionY), Vec2(BallStartSpeedX, BallStartSpeedY), BallColor)
 {
 	for (int i = 0; i < BrickNum; i++)
@@ -40,6 +40,13 @@ Game::Game( MainWindow& wnd )
 	}
 }
 
+void Game::DrawWall()
+{
+	gfx.DrawRect(0, 0, int(WallThickness), Graphics::ScreenHeight, WallColor);
+	gfx.DrawRect(0, 0, Graphics::ScreenWidth, int(WallThickness), WallColor);
+	gfx.DrawRect(Graphics::ScreenWidth - int(WallThickness), 0, Graphics::ScreenWidth, Graphics::ScreenHeight, WallColor);
+}
+
 void Game::DrawBrickArray()
 {
 	for (int i = 0; i < BrickNum; i++)
@@ -51,8 +58,8 @@ void Game::DrawBrickArray()
 			const float OriginX = BrickArray[i].GetOriginPositionX();
 			const float OriginY = BrickArray[i].GetOriginPositionY();
 
-			gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, Colors::Black);
-			gfx.DrawRect(OriginX + 2, OriginY + 2, Width + OriginX - 2, Height + OriginY - 2, BrickArray[i].GetColor());
+			gfx.DrawRect(int(OriginX), int(OriginY), int(Width + OriginX), int(Height + OriginY), Colors::Black);
+			gfx.DrawRect(int(OriginX + 2.0f), int(OriginY + 2.0f), int(Width + OriginX - 2.0f), int(Height + OriginY - 2.0f), BrickArray[i].GetColor());
 		}
 	}
 }
@@ -63,7 +70,7 @@ void Game::DrawPaddle()
 	const float Height = PlayerPaddle.GetHeight();
 	const float OriginX = PlayerPaddle.GetOriginPositionX();
 	const float OriginY = PlayerPaddle.GetOriginPositionY();
-	gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, PlayerPaddle.GetColor());
+	gfx.DrawRect(int(OriginX), int(OriginY), int(Width + OriginX), int(Height + OriginY), PlayerPaddle.GetColor());
 }
 
 void Game::DrawBall()
@@ -87,25 +94,38 @@ void Game::Go()
 
 void Game::UpdateModel(float DeltaTime)
 {
-	PlayerPaddle.Update(wnd.kbd, DeltaTime);
-	bool test = false;
-	for (int i = 0; i < BrickNum; i++)
+	if(!PlayerBall.GetState())
 	{
-		if (PlayerBall.DetectCollisionWithBrick(BrickArray[i]))
+		PlayerPaddle.Update(wnd.kbd, DeltaTime, WallThickness);
+		bool IsBallCollidedWithBrick = false;
+		for (int i = 0; i < BrickNum; i++)
 		{
-			test = true;
-			break;
+			if (PlayerBall.DetectCollisionWithBrick(BrickArray[i], DeltaTime))
+			{
+				IsBallCollidedWithBrick = true;
+				break;
+			}
 		}
-	}
-	if (!(PlayerBall.DetectCollisionWithBoard() || PlayerBall.DetectCollisionWithPaddle(PlayerPaddle) || test))
-	{
-		PlayerBall.Update();
+		if (
+			!(PlayerBall.DetectCollisionWithBoard(WallThickness, DeltaTime)
+			||
+			PlayerBall.DetectCollisionWithPaddle(PlayerPaddle, DeltaTime)
+			||
+			IsBallCollidedWithBrick)
+		)
+		{
+			PlayerBall.Update(DeltaTime);
+		}
 	}
 }
 
 void Game::ComposeFrame()
 {
-	DrawBrickArray();
-	DrawPaddle();
-	DrawBall();
+	DrawWall();
+	if(!PlayerBall.GetState())
+	{
+		DrawBrickArray();
+		DrawPaddle();
+		DrawBall();
+	}
 }

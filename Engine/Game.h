@@ -37,6 +37,7 @@ public:
 private:
 	void ComposeFrame();
 	void UpdateModel(float DeltaTime);
+	void DrawWall();
 	void DrawBrickArray();
 	void DrawPaddle();
 	void DrawBall();
@@ -46,28 +47,33 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+
 	static constexpr int BricksRowNum = 8;
 	static constexpr int BricksColumeNum = 8;
 	static constexpr int ColorsNum = 5;
 	static constexpr int BrickNum = BricksColumeNum * BricksRowNum;
-	static constexpr int BrickSpreadingAreaSizeX = 500;
-	static constexpr int BrickSpreadingAreaSizeY = 200;
-	static constexpr int BrickSpreadingAreaOffsetX = (Graphics::ScreenWidth - BrickSpreadingAreaSizeX) / 2;
-	static constexpr int BrickSpreadingAreaOffsetY = 100;
-	static constexpr int PaddleWidth = 100;
-	static constexpr int PaddleHeight = 20;
-	static constexpr int PaddleStartPositionX = (Graphics::ScreenWidth - PaddleWidth) / 2;
-	static constexpr int PaddleStartPositionY = 550;
+	static constexpr float BrickSpreadingAreaSizeX = 500.0f;
+	static constexpr float BrickSpreadingAreaSizeY = 200.0f;
+	static constexpr float BrickSpreadingAreaOffsetX = (Graphics::ScreenWidth - BrickSpreadingAreaSizeX) / 2.0f;
+	static constexpr float BrickSpreadingAreaOffsetY = 100.0f;
+	static constexpr float WallThickness = 20.0f;
+	static constexpr Color WallColor = Colors::LightGray;
+	static constexpr float PaddleWidth = 200.0f;
+	static constexpr float PaddleHeight = 20.0f;
+	static constexpr float PaddleStartPositionX = (Graphics::ScreenWidth - PaddleWidth) / 2.0f;
+	static constexpr float PaddleStartPositionY = 550.0f;
+	static constexpr float PaddleMovingSpeed = 480.0f;
 	static constexpr Color PaddleColor = Colors::Red;
-	static constexpr int BallStartPositionX = PaddleStartPositionX + PaddleWidth / 2;
-	static constexpr int BallStartPositionY = PaddleStartPositionY;
-	static constexpr float BallStartSpeedX = 5.0f;
-	static constexpr float BallStartSpeedY = -5.0f;
+	static constexpr float BallStartPositionX = PaddleStartPositionX + PaddleWidth / 2.0f;
+	static constexpr float BallStartPositionY = PaddleStartPositionY;
+	static constexpr float BallStartSpeedX = 300.0f;
+	static constexpr float BallStartSpeedY = -300.0f;
 	static constexpr float BallRadius = 10.0f;
 	static constexpr Color BallColor = Colors::Yellow;
 	static constexpr float DeltaTime = 1.0f / 60.0f;
-	const float BrickWidth = BrickSpreadingAreaSizeX / BricksRowNum;
-	const float BrickHeight = BrickSpreadingAreaSizeY / BricksColumeNum;
+	static constexpr float BrickWidth = BrickSpreadingAreaSizeX / BricksRowNum;
+	static constexpr float BrickHeight = BrickSpreadingAreaSizeY / BricksColumeNum;
+
 	Ball PlayerBall;
 	Paddle PlayerPaddle;
 	Brick BrickArray[BrickNum];

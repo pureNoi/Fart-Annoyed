@@ -1,19 +1,20 @@
 #include "Paddle.h"
 
-Paddle::Paddle(float WidthInput, float HeightInput, Vec2 OriginPositionInput, Color ColorInput)
+Paddle::Paddle(float WidthInput, float HeightInput, float PaddleMovingSpeedInput, Vec2 OriginPositionInput, Color ColorInput)
 	:
-	Rectangle(WidthInput, HeightInput, OriginPositionInput, ColorInput)
+	Rectangle(WidthInput, HeightInput, OriginPositionInput, ColorInput),
+	PaddleMovingSpeed(PaddleMovingSpeedInput)
 {
 }
 
-void Paddle::Update(const Keyboard& kbd, float DeltaTime)
+void Paddle::Update(const Keyboard& kbd, float DeltaTime, float WallThickness)
 {
 	if (kbd.KeyIsPressed( VK_RIGHT ))
 	{	
 		const float RightSidePosition = Rectangle.OriginPosition.x + DeltaTime * PaddleMovingSpeed + Rectangle.Width;
-		if(RightSidePosition > Graphics::ScreenWidth)
+		if(RightSidePosition > Graphics::ScreenWidth - WallThickness)
 		{
-			Rectangle.OriginPosition.x = Graphics::ScreenWidth - Rectangle.Width;
+			Rectangle.OriginPosition.x = Graphics::ScreenWidth - Rectangle.Width - WallThickness;
 		}
 		else 
 		{
@@ -23,9 +24,9 @@ void Paddle::Update(const Keyboard& kbd, float DeltaTime)
 	if (kbd.KeyIsPressed( VK_LEFT ))
 	{	
 		const float LeftSidePosition = Rectangle.OriginPosition.x - DeltaTime * PaddleMovingSpeed;
-		if (LeftSidePosition < 0)
+		if (LeftSidePosition < WallThickness)
 		{
-			Rectangle.OriginPosition.x = 0;
+			Rectangle.OriginPosition.x = WallThickness;
 		}
 		else 
 		{

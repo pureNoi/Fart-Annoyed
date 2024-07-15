@@ -10,10 +10,11 @@ class Ball
 {	
 public:
 	Ball(float RadiusInput, Vec2 CenterPositionInput, Vec2 VelocityInput, Color ColorInput);
-	void Update();
-	bool DetectCollisionWithBoard();
-	bool DetectCollisionWithPaddle(const Paddle& PlayerPaddle);
-	bool DetectCollisionWithBrick(Brick& Brick);
+	void Update(float DeltaTime);
+	bool DetectCollisionWithBoard(float WallThickness, float DeltaTime);
+	bool DetectCollisionWithPaddle(const Paddle& PlayerPaddle, float DeltaTime);
+	bool DetectCollisionWithBrick(Brick& Brick, float DeltaTime);
+	bool GetState() const;
 	void BounceX();
 	void BounceY();
 	float GetCenterPositionX() const;

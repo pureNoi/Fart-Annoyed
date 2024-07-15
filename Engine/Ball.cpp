@@ -9,39 +9,40 @@ Ball::Ball(float RadiusInput, Vec2 CenterPositionInput, Vec2 VelocityInput, Colo
 {
 }
 
-void Ball::Update()
-{		
-	CenterPosition += Velocity;
+void Ball::Update(float DeltaTime)
+{			
+	CenterPosition += Velocity * DeltaTime;
 }
 
-bool Ball::DetectCollisionWithBoard()
+bool Ball::DetectCollisionWithBoard(float WallThickness, float DeltaTime)
 {
-	const float TopSidePosition = CenterPosition.y + Velocity.y - Radius;
-	const float BottomSidePosition = CenterPosition.y + Velocity.y + Radius;
-	const float LeftSidePosition = CenterPosition.x + Velocity.x - Radius;
-	const float RightSidePosition = CenterPosition.x + Velocity.x + Radius;
+	const float BallTopSidePosition = CenterPosition.y + Velocity.y * DeltaTime - Radius;
+	const float BallBottomSidePosition = CenterPosition.y + Velocity.y * DeltaTime + Radius;
+	const float BallLeftSidePosition = CenterPosition.x + Velocity.x * DeltaTime - Radius;
+	const float BallRightSidePosition = CenterPosition.x + Velocity.x * DeltaTime + Radius;
 
-	if (TopSidePosition <= 0)
+	if (BallTopSidePosition <= WallThickness)
 	{
-		CenterPosition.y = Radius;
+		CenterPosition.y = Radius + WallThickness;
 		BounceY();
 		return true;
 	}
-	else if (BottomSidePosition >= Graphics::ScreenHeight)
+	else if (BallBottomSidePosition >= Graphics::ScreenHeight)
 	{
-		CenterPosition.y = Graphics::ScreenHeight - Radius;
+		CenterPosition.y = Graphics::ScreenHeight - Radius - WallThickness;
 		BounceY();
+		GameIsOver = true;
 		return true;
 	}
-	else if (LeftSidePosition <= 0)
+	else if (BallLeftSidePosition <= WallThickness)
 	{
-		CenterPosition.x = Radius;
+		CenterPosition.x = Radius + WallThickness;
 		BounceX();
 		return true;
 	}
-	else if (RightSidePosition >= Graphics::ScreenWidth)
+	else if (BallRightSidePosition >= Graphics::ScreenWidth - WallThickness)
 	{
-		CenterPosition.x = Graphics::ScreenWidth - Radius;
+		CenterPosition.x = Graphics::ScreenWidth - Radius - WallThickness;
 		BounceX();
 		return true;
 	}
@@ -51,12 +52,12 @@ bool Ball::DetectCollisionWithBoard()
 	}
 }
 
-bool Ball::DetectCollisionWithPaddle(const Paddle& PlayerPaddle)
+bool Ball::DetectCollisionWithPaddle(const Paddle& PlayerPaddle, float DeltaTime)
 {	
-	const float BallTopSidePosition = CenterPosition.y + Velocity.y - Radius;
-	const float BallBottomSidePosition = CenterPosition.y + Velocity.y + Radius;
-	const float BallLeftSidePosition = CenterPosition.x + Velocity.x - Radius;
-	const float BallRightSidePosition = CenterPosition.x + Velocity.x + Radius;
+	const float BallTopSidePosition = CenterPosition.y + Velocity.y * DeltaTime - Radius;
+	const float BallBottomSidePosition = CenterPosition.y + Velocity.y * DeltaTime + Radius;
+	const float BallLeftSidePosition = CenterPosition.x + Velocity.x * DeltaTime - Radius;
+	const float BallRightSidePosition = CenterPosition.x + Velocity.x * DeltaTime + Radius;
 
 	const float PaddleTopSidePosition = PlayerPaddle.GetOriginPositionY() - SqrtRadius;
 	const float PaddleBottomSidePosition = PlayerPaddle.GetOriginPositionY() + PlayerPaddle.GetHeight();
@@ -117,17 +118,17 @@ bool Ball::DetectCollisionWithPaddle(const Paddle& PlayerPaddle)
 	}
 }
 
-bool Ball::DetectCollisionWithBrick(Brick& Brick)
+bool Ball::DetectCollisionWithBrick(Brick& Brick, float DeltaTime)
 {
 	if (Brick.GetState())
 	{
 		return false;
 	}
 
-	const float BallTopSidePosition = CenterPosition.y + Velocity.y - Radius;
-	const float BallBottomSidePosition = CenterPosition.y + Velocity.y + Radius;
-	const float BallLeftSidePosition = CenterPosition.x + Velocity.x - Radius;
-	const float BallRightSidePosition = CenterPosition.x + Velocity.x + Radius;
+	const float BallTopSidePosition = CenterPosition.y + Velocity.y * DeltaTime - Radius;
+	const float BallBottomSidePosition = CenterPosition.y + Velocity.y * DeltaTime + Radius;
+	const float BallLeftSidePosition = CenterPosition.x + Velocity.x * DeltaTime - Radius;
+	const float BallRightSidePosition = CenterPosition.x + Velocity.x * DeltaTime + Radius;
 
 	const float BrickTopSidePosition = Brick.GetOriginPositionY() - SqrtRadius;
 	const float BrickBottomSidePosition = Brick.GetOriginPositionY() + Brick.GetHeight();
@@ -190,6 +191,11 @@ bool Ball::DetectCollisionWithBrick(Brick& Brick)
 	{
 		return false;
 	}
+}
+
+bool Ball::GetState() const
+{
+	return GameIsOver;
 }
 
 void Ball::BounceX()
