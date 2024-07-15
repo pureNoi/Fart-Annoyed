@@ -9,12 +9,28 @@ Paddle::Paddle(float WidthInput, float HeightInput, Vec2 OriginPositionInput, Co
 void Paddle::Update(const Keyboard& kbd, float DeltaTime)
 {
 	if (kbd.KeyIsPressed( VK_RIGHT ))
-	{
-		Rectangle.OriginPosition.x += DeltaTime * PaddleMovingSpeed;
+	{	
+		const float RightSidePositionX = Rectangle.OriginPosition.x + DeltaTime * PaddleMovingSpeed + Rectangle.Width;
+		if(RightSidePositionX > Graphics::ScreenWidth)
+		{
+			Rectangle.OriginPosition.x = Graphics::ScreenWidth - Rectangle.Width;
+		}
+		else 
+		{
+			Rectangle.OriginPosition.x = Rectangle.OriginPosition.x + DeltaTime * PaddleMovingSpeed;
+		}
 	}
 	if (kbd.KeyIsPressed( VK_LEFT ))
-	{
-		Rectangle.OriginPosition.x -= DeltaTime * PaddleMovingSpeed;
+	{	
+		const float LeftSidePositionX = Rectangle.OriginPosition.x - DeltaTime * PaddleMovingSpeed;
+		if (LeftSidePositionX < 0)
+		{
+			Rectangle.OriginPosition.x = 0;
+		}
+		else 
+		{
+			Rectangle.OriginPosition.x = Rectangle.OriginPosition.x - DeltaTime * PaddleMovingSpeed;
+		}
 	}
 }
 
