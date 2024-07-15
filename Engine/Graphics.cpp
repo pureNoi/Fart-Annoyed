@@ -353,18 +353,6 @@ void Graphics::DrawCircle( int x,int y,int radius,Color c )
 	}
 }
 
-void Graphics::DrawBrick(Brick Brick)
-{
-	const float Width = Brick.GetWidth();
-	const float Height = Brick.GetHeight();
-	const float OriginX = Brick.GetOriginPositionX();
-	const float OriginY = Brick.GetOriginPositionY();
-
-	DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, Colors::Black);
-	DrawRect(OriginX + 2, OriginY + 2, Width + OriginX - 2, Height + OriginY - 2, Brick.GetColor());
-}
-
-
 //////////////////////////////////////////////////
 //           Graphics Exception
 Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )

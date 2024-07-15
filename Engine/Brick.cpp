@@ -1,8 +1,8 @@
 #include "Brick.h"
 
-Brick::Brick(float WidthInput, float HeightInput, Vec2 CenterPositionInput, Color ColorInput)
+Brick::Brick(float WidthInput, float HeightInput, Vec2 OriginPositionInput, Color ColorInput)
 	:
-	Rectangle(WidthInput, HeightInput, CenterPositionInput, ColorInput)
+	Rectangle(WidthInput, HeightInput, OriginPositionInput, ColorInput)
 {
 }
 

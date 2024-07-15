@@ -24,7 +24,8 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	PlayerPaddle(PaddleWidth, PaddleHeight, Vec2(PaddleStartPositionX, PaddleStartPositionY), PaddleColor)
 {
 	for (int i = 0; i < BrickNum; i++)
 	{	
@@ -38,27 +39,44 @@ Game::Game( MainWindow& wnd )
 	}
 }
 
+void Game::DrawBrickArray()
+{
+	for (int i = 0; i < BrickNum; i++)
+	{
+		const float Width = BrickArray[i].GetWidth();
+		const float Height = BrickArray[i].GetHeight();
+		const float OriginX = BrickArray[i].GetOriginPositionX();
+		const float OriginY = BrickArray[i].GetOriginPositionY();
+
+		gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, Colors::Black);
+		gfx.DrawRect(OriginX + 2, OriginY + 2, Width + OriginX - 2, Height + OriginY - 2, BrickArray[i].GetColor());
+	}
+}
+
+void Game::DrawPaddle()
+{
+	const float Width = PlayerPaddle.GetWidth();
+	const float Height = PlayerPaddle.GetHeight();
+	const float OriginX = PlayerPaddle.GetOriginPositionX();
+	const float OriginY = PlayerPaddle.GetOriginPositionY();
+	gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, PlayerPaddle.GetColor());
+}
+
 void Game::Go()
 {
 	gfx.BeginFrame();	
-	UpdateModel();
+	UpdateModel(DeltaTime);
 	ComposeFrame();
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel()
+void Game::UpdateModel(float DeltaTime)
 {
-	DrawBrickArray();
-}
-
-void Game::DrawBrickArray()
-{
-	for (int i = 0; i< BrickNum; i++)
-	{
-		gfx.DrawBrick(BrickArray[i]);
-	}
+	PlayerPaddle.Update(wnd.kbd, DeltaTime);
 }
 
 void Game::ComposeFrame()
 {
+	DrawBrickArray();
+	DrawPaddle();
 }

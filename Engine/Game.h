@@ -23,6 +23,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "Brick.h"
+#include "Paddle.h"
 
 class Game
 {
@@ -33,8 +35,9 @@ public:
 	void Go();
 private:
 	void ComposeFrame();
-	void UpdateModel();
+	void UpdateModel(float DeltaTime);
 	void DrawBrickArray();
+	void DrawPaddle();
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -49,8 +52,15 @@ private:
 	static constexpr int BrickSpreadingAreaSizeY = 200;
 	static constexpr int BrickSpreadingAreaOffsetX = (Graphics::ScreenWidth - BrickSpreadingAreaSizeX) / 2;
 	static constexpr int BrickSpreadingAreaOffsetY = 100;
+	static constexpr int PaddleWidth = 60;
+	static constexpr int PaddleHeight = 20;
+	static constexpr int PaddleStartPositionX = (Graphics::ScreenWidth - PaddleWidth) / 2;
+	static constexpr int PaddleStartPositionY = 550;
+	static constexpr float DeltaTime = 1.0f / 60.0f;
+	static constexpr Color PaddleColor = Colors::Red;
 	const float BrickWidth = BrickSpreadingAreaSizeX / BricksRowNum;
 	const float BrickHeight = BrickSpreadingAreaSizeY / BricksColumeNum;
+	Paddle PlayerPaddle;
 	Brick BrickArray[BrickNum];
 	Color ColorArray[ColorsNum] = {Colors::Blue, Colors::Cyan, Colors::Gray, Colors::Green, Colors::Magenta};
 	/********************************/
