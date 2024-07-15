@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Brick.h"
 #include "Paddle.h"
+#include "Ball.h"
 
 class Game
 {
@@ -38,6 +39,7 @@ private:
 	void UpdateModel(float DeltaTime);
 	void DrawBrickArray();
 	void DrawPaddle();
+	void DrawBall();
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -52,14 +54,21 @@ private:
 	static constexpr int BrickSpreadingAreaSizeY = 200;
 	static constexpr int BrickSpreadingAreaOffsetX = (Graphics::ScreenWidth - BrickSpreadingAreaSizeX) / 2;
 	static constexpr int BrickSpreadingAreaOffsetY = 100;
-	static constexpr int PaddleWidth = 60;
+	static constexpr int PaddleWidth = 100;
 	static constexpr int PaddleHeight = 20;
 	static constexpr int PaddleStartPositionX = (Graphics::ScreenWidth - PaddleWidth) / 2;
 	static constexpr int PaddleStartPositionY = 550;
-	static constexpr float DeltaTime = 1.0f / 60.0f;
 	static constexpr Color PaddleColor = Colors::Red;
+	static constexpr int BallStartPositionX = PaddleStartPositionX + PaddleWidth / 2;
+	static constexpr int BallStartPositionY = PaddleStartPositionY;
+	static constexpr float BallStartSpeedX = 5.0f;
+	static constexpr float BallStartSpeedY = -5.0f;
+	static constexpr float BallRadius = 10.0f;
+	static constexpr Color BallColor = Colors::Yellow;
+	static constexpr float DeltaTime = 1.0f / 60.0f;
 	const float BrickWidth = BrickSpreadingAreaSizeX / BricksRowNum;
 	const float BrickHeight = BrickSpreadingAreaSizeY / BricksColumeNum;
+	Ball PlayerBall;
 	Paddle PlayerPaddle;
 	Brick BrickArray[BrickNum];
 	Color ColorArray[ColorsNum] = {Colors::Blue, Colors::Cyan, Colors::Gray, Colors::Green, Colors::Magenta};

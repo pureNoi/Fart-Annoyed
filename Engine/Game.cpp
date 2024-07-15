@@ -25,7 +25,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	PlayerPaddle(PaddleWidth, PaddleHeight, Vec2(PaddleStartPositionX, PaddleStartPositionY), PaddleColor)
+	PlayerPaddle(PaddleWidth, PaddleHeight, Vec2(PaddleStartPositionX, PaddleStartPositionY), PaddleColor),
+	PlayerBall(BallRadius, Vec2(BallStartPositionX, BallStartPositionY), Vec2(BallStartSpeedX, BallStartSpeedY), BallColor)
 {
 	for (int i = 0; i < BrickNum; i++)
 	{	
@@ -42,14 +43,17 @@ Game::Game( MainWindow& wnd )
 void Game::DrawBrickArray()
 {
 	for (int i = 0; i < BrickNum; i++)
-	{
-		const float Width = BrickArray[i].GetWidth();
-		const float Height = BrickArray[i].GetHeight();
-		const float OriginX = BrickArray[i].GetOriginPositionX();
-		const float OriginY = BrickArray[i].GetOriginPositionY();
+	{	
+		if(!BrickArray[i].GetState())
+		{
+			const float Width = BrickArray[i].GetWidth();
+			const float Height = BrickArray[i].GetHeight();
+			const float OriginX = BrickArray[i].GetOriginPositionX();
+			const float OriginY = BrickArray[i].GetOriginPositionY();
 
-		gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, Colors::Black);
-		gfx.DrawRect(OriginX + 2, OriginY + 2, Width + OriginX - 2, Height + OriginY - 2, BrickArray[i].GetColor());
+			gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, Colors::Black);
+			gfx.DrawRect(OriginX + 2, OriginY + 2, Width + OriginX - 2, Height + OriginY - 2, BrickArray[i].GetColor());
+		}
 	}
 }
 
@@ -62,6 +66,17 @@ void Game::DrawPaddle()
 	gfx.DrawRect(OriginX, OriginY, Width + OriginX, Height + OriginY, PlayerPaddle.GetColor());
 }
 
+void Game::DrawBall()
+{
+	gfx.DrawCircle(
+		int(PlayerBall.GetCenterPositionX()),
+		int(PlayerBall.GetCenterPositionY()),
+		int(PlayerBall.GetRadius()),
+		PlayerBall.GetColor()
+	);
+}
+
+
 void Game::Go()
 {
 	gfx.BeginFrame();	
@@ -73,10 +88,12 @@ void Game::Go()
 void Game::UpdateModel(float DeltaTime)
 {
 	PlayerPaddle.Update(wnd.kbd, DeltaTime);
+	PlayerBall.Update(BrickArray[1], PlayerPaddle);
 }
 
 void Game::ComposeFrame()
 {
 	DrawBrickArray();
 	DrawPaddle();
+	DrawBall();
 }

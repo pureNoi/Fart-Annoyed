@@ -34,6 +34,11 @@ float Brick::GetHeight() const
 	return Rectangle.Height;
 }
 
+bool Brick::GetState() const
+{
+	return IsDestroyed;
+}
+
 Color Brick::GetColor() const
 {
 	return Rectangle.RectangleColor;

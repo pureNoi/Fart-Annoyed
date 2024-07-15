@@ -15,5 +15,5 @@ public:
 	Color GetColor() const;
 private:
 	RectangleElement Rectangle;
-	const float PaddleMovingSpeed = 120.0f;
+	const float PaddleMovingSpeed = 240.0f;
 };

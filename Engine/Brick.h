@@ -11,8 +11,10 @@ public:
 	float GetOriginPositionY() const;
 	float GetWidth() const;
 	float GetHeight() const;
+	bool GetState() const;
 	Color GetColor() const;
 
 private:
 	RectangleElement Rectangle;
+	bool IsDestroyed = false;
 };

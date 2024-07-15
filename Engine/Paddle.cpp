@@ -10,8 +10,8 @@ void Paddle::Update(const Keyboard& kbd, float DeltaTime)
 {
 	if (kbd.KeyIsPressed( VK_RIGHT ))
 	{	
-		const float RightSidePositionX = Rectangle.OriginPosition.x + DeltaTime * PaddleMovingSpeed + Rectangle.Width;
-		if(RightSidePositionX > Graphics::ScreenWidth)
+		const float RightSidePosition = Rectangle.OriginPosition.x + DeltaTime * PaddleMovingSpeed + Rectangle.Width;
+		if(RightSidePosition > Graphics::ScreenWidth)
 		{
 			Rectangle.OriginPosition.x = Graphics::ScreenWidth - Rectangle.Width;
 		}
@@ -22,8 +22,8 @@ void Paddle::Update(const Keyboard& kbd, float DeltaTime)
 	}
 	if (kbd.KeyIsPressed( VK_LEFT ))
 	{	
-		const float LeftSidePositionX = Rectangle.OriginPosition.x - DeltaTime * PaddleMovingSpeed;
-		if (LeftSidePositionX < 0)
+		const float LeftSidePosition = Rectangle.OriginPosition.x - DeltaTime * PaddleMovingSpeed;
+		if (LeftSidePosition < 0)
 		{
 			Rectangle.OriginPosition.x = 0;
 		}
