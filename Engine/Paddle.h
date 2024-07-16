@@ -7,7 +7,7 @@ class Paddle
 {
 public:
 	Paddle(float WidthInput, float HeightInput, float PaddleMovingSpeedInput, Vec2 OriginPositionInput, Color ColorInput);
-	void Update(const Keyboard& kbd, float DeltaTime, float WallThickness);
+	void Update(const Keyboard& kbd, float DeltaTime, Vec2 HorizonMovingRange);
 	float GetOriginPositionX() const;
 	float GetOriginPositionY() const;
 	float GetWidth() const;
@@ -15,5 +15,5 @@ public:
 	Color GetColor() const;
 private:
 	RectangleElement Rectangle;
-	const float PaddleMovingSpeed;
+	float PaddleMovingSpeed;
 };

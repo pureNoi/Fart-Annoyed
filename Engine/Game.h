@@ -74,6 +74,7 @@ private:
 	static constexpr float BrickWidth = BrickSpreadingAreaSizeX / BricksRowNum;
 	static constexpr float BrickHeight = BrickSpreadingAreaSizeY / BricksColumeNum;
 
+	Vec2 PaddleHorizonMovingRange = Vec2(WallThickness, Graphics::ScreenWidth - WallThickness);
 	Ball PlayerBall;
 	Paddle PlayerPaddle;
 	Brick BrickArray[BrickNum];

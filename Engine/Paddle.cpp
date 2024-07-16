@@ -7,14 +7,14 @@ Paddle::Paddle(float WidthInput, float HeightInput, float PaddleMovingSpeedInput
 {
 }
 
-void Paddle::Update(const Keyboard& kbd, float DeltaTime, float WallThickness)
+void Paddle::Update(const Keyboard& kbd, float DeltaTime, Vec2 HorizonMovingRange)
 {
 	if (kbd.KeyIsPressed( VK_RIGHT ))
 	{	
 		const float RightSidePosition = Rectangle.OriginPosition.x + DeltaTime * PaddleMovingSpeed + Rectangle.Width;
-		if(RightSidePosition > Graphics::ScreenWidth - WallThickness)
+		if(RightSidePosition > HorizonMovingRange.y/*Graphics::ScreenWidth - WallThickness*/)
 		{
-			Rectangle.OriginPosition.x = Graphics::ScreenWidth - Rectangle.Width - WallThickness;
+			Rectangle.OriginPosition.x = HorizonMovingRange.y - Rectangle.Width;
 		}
 		else 
 		{
@@ -24,9 +24,9 @@ void Paddle::Update(const Keyboard& kbd, float DeltaTime, float WallThickness)
 	if (kbd.KeyIsPressed( VK_LEFT ))
 	{	
 		const float LeftSidePosition = Rectangle.OriginPosition.x - DeltaTime * PaddleMovingSpeed;
-		if (LeftSidePosition < WallThickness)
+		if (LeftSidePosition < HorizonMovingRange.x/*WallThickness*/)
 		{
-			Rectangle.OriginPosition.x = WallThickness;
+			Rectangle.OriginPosition.x = HorizonMovingRange.x;
 		}
 		else 
 		{

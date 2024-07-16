@@ -96,15 +96,15 @@ void Game::UpdateModel(float DeltaTime)
 {
 	if (!PlayerBall.GetState())
 	{
-		PlayerPaddle.Update(wnd.kbd, DeltaTime, WallThickness);
-		bool IsBallCollidedWithBrick = false;
 		for (int i = 0; i < BrickNum; i++)
 		{
 			PlayerBall.DetectCollisionWithBrick(BrickArray[i], DeltaTime);
 		}
 		PlayerBall.DetectCollisionWithBoard(WallThickness, DeltaTime);
 		PlayerBall.DetectCollisionWithPaddle(PlayerPaddle, DeltaTime);
-		PlayerBall.Update(DeltaTime);
+		PlayerBall.Update(DeltaTime, WallThickness);
+		PlayerBall.ClampPaddleHorizonMovingRange(PlayerPaddle, PaddleHorizonMovingRange, WallThickness);
+		PlayerPaddle.Update(wnd.kbd, DeltaTime, PaddleHorizonMovingRange);
 	}
 }
 
